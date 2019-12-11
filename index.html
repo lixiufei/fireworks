@@ -1,206 +1,251 @@
 <!DOCTYPE html>
 
 <html lang="zh-CN">
-	<head>
-		<meta charset="utf-8" />
-	    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-	    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
-		<title>烟花秀</title>
-		<link rel="stylesheet" href="css/app.css" />
-	</head>
-	
-	<body class="bg04">
-		
-		<div class="wrapper">
-			<div class="container-fluid">
-				<div class="fill-h">
-					<div class="xpanel-wrapper xpanel-wrapper-1">
-						<div class="xpanel no-padding no-bg">
-							<div class="fill-h" id="fireworks"></div>
-						</div>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+	<title>烟花秀</title>
+	<link rel="stylesheet" href="css/app.css" />
+</head>
+
+<body class="bg04">
+
+	<div class="wrapper">
+		<div class="container-fluid">
+			<div class="fill-h">
+				<div class="xpanel-wrapper xpanel-wrapper-1">
+					<div class="xpanel no-padding no-bg">
+						<div class="fill-h" id="fireworks"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-		
-		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-		<script type="text/javascript" src="js/echarts-3.8.5.min.js"></script>
-		<script type="text/javascript">
-			$(function() {
-				
-				/*************** 烟花秀 **************/
-				//初始化echarts实例
-				const fireworksChart = echarts.init(document.getElementById("fireworks"));
-				(function() {
-		            let build = function() {
-		                let arr = [200];
-		                for (let i = 0; i < 200; i++) {
-		                    arr.push(0);
-		                }
-		                return arr;
-		            };
-		            let x = Math.random() * 200
-		            let y = 160
-					let all = []
-					let pole = [{
-						    coords: [
-						        [x, 0],
-						        [x, y]
-						    ]
-						}]
-					let color = ['#DD0000', '#FFFF00','#FFFFFF','#00FF00',
-								 '#DD0000', '#FFFF00','#FFFFFF','#00FF00',
-								 '#DD0000', '#FFFF00','#FFFFFF','#00FF00',
-								 '#DD0000', '#FFFF00','#FFFFFF','#00FF00']
-					for (var i=0; i<color.length; i++) {
-						let a = Math.random() * 20
-						let b = Math.random() * 60
-						
-							let one = {
-							            coords: [
-							                [x, y],
-							                [x+a, y+b]
-							            ],
-										lineStyle: {
-										    normal: {
-										        color: color[i]
-										    }
-										}
-							        }
-									
-									all.push(one)
-							let two = { //第二象限
-							            coords: [
-							                [x, y],
-							                [x-a, y+b]
-							            ],
-										lineStyle: {
-										    normal: {
-										        color: color[i]
-										    }
-										}
-							        }
-									all.push(two)
-							let three = { //第三象限
-							            coords: [
-							                [x, y],
-							                [x-a, y-b]
-							            ],
-										lineStyle: {
-										    normal: {
-										        color: color[i]
-										    }
-										}
-							        }
-									all.push(three)
-							let four = { // 第四象限
-							            coords: [
-							                [x, y],
-							                [x+a, y-b]
-							            ],
-										lineStyle: {
-										    normal: {
-										        color: color[i]
-										    }
-										}
-							        }
-									all.push(four)
-						}
-					
-		            option = {
-		                xAxis: {
-		                    data: [],
-		                    splitLine: {
-		                        show: false
-		                    },
-		                    axisLine: {
-		                        show: false
-		                    },
-		                    axisTick: {
-		                        show: false
-		                    },
-		                    axisLabel: {
-		                        show: false
-		                    }
-		                },
-		                yAxis: {
-		                    silent: true,
-		                    splitLine: {
-		                        show: false
-		                    },
-		                    axisLine: {
-		                        show: false
-		                    },
-		                    axisTick: {
-		                        show: false
-		                    },
-		                    axisLabel: {
-		                        show: false
-		                    }
-		                },
-		                series: [ {
-		                    type: 'bar',
-		                    data: build(),
-							itemStyle:{
-								normal:{
-									color: 'transparent'
-								},
+	</div>
+
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="js/echarts-3.8.5.min.js"></script>
+	<script type="text/javascript">
+		$(function () {
+
+			/*************** 烟花秀 **************/
+			//初始化echarts实例
+
+			const that = this;
+			const fireworksChart = echarts.init(document.getElementById("fireworks"));
+			// let aa = 20;
+			// let bb = 60; // 大烟花
+			let aa = 10;
+			let bb = 15; // 心形小烟花
+			let build = function () {
+				let arr = [200];
+				for (let i = 0; i < 200; i++) {
+					arr.push(0);
+				}
+				return arr;
+			};
+			that.series = []
+			let fireWork = function (x, y, aa, bb) {
+				let all = []
+				let pole = [{
+					coords: [
+						[x, 0],
+						[x, y]
+					]
+				}]
+				let color = ['#DD0000', '#FFFF00', '#FFFFFF', '#00FF00',
+					'#DD0000', '#FFFF00', '#FFFFFF', '#00FF00',
+					'#DD0000', '#FFFF00', '#FFFFFF', '#00FF00',
+					'#DD0000', '#FFFF00', '#FFFFFF', '#00FF00'
+				]
+				for (var i = 0; i < color.length; i++) {
+					let a = Math.random() * aa
+					let b = Math.random() * bb
+					let one = {
+						coords: [
+							[x, y],
+							[x + a, y + b]
+						],
+						lineStyle: {
+							normal: {
+								color: color[i]
 							}
-		                },  {
-		                    coordinateSystem: 'cartesian2d',
-		                    type: 'lines',
-		                    zlevel: -2,
-		                    effect: {
-		                        show: true,
-		                        period: 1,
-		                        trailLength: 0.01,
-		                        symbolSize: 4,
-		                        symbol: 'circle',
-		                        loop: true
-		                    },
-		                    lineStyle: {
-		                        normal: {
-		                            color: '#ccc',
-		                            opacity: 0,
-		                            curveness: 0
-		                        }
-		                    },
-		                    data: pole,
-		                }, {
-		                    coordinateSystem: 'cartesian2d',
-		                    type: 'lines',
-		                    zlevel: 2,
-		                    symbolSize: 3,
-		                    effect: {
-		                        show: true,
-		                        period: 1,
-		                        trailLength: 0.01,
-		                        symbolSize: 5,
-		                        symbol: 'pin',
-		                        loop: true
-		                    },
-		                    lineStyle: {
-		                        normal: {
-		                            color: '#ccc',
-		                            opacity: 0.02,
-		                            width: 0.01,
-		                            curveness: 0.1
-		                        }
-		                    },
-		                    data: all,
-		                }],
-		            };
-		            
-		            fireworksChart.setOption(option);
-				})();
-				
-				
-				
-				/********** 窗口大小改变时，重置报表大小 ********************/
-				window.onresize = function() {
-					fireworksChart.resize();
-				};
-			});
-		</script>
-	</body>
+						}
+					}
+
+					all.push(one)
+					let two = { //第二象限
+						coords: [
+							[x, y],
+							[x - a, y + b]
+						],
+						lineStyle: {
+							normal: {
+								color: color[i]
+							}
+						}
+					}
+					all.push(two)
+					let three = { //第三象限
+						coords: [
+							[x, y],
+							[x - a, y - b]
+						],
+						lineStyle: {
+							normal: {
+								color: color[i]
+							}
+						}
+					}
+					all.push(three)
+					let four = { // 第四象限
+						coords: [
+							[x, y],
+							[x + a, y - b]
+						],
+						lineStyle: {
+							normal: {
+								color: color[i]
+							}
+						}
+					}
+					all.push(four)
+				}
+
+				that.series.push({
+					type: 'bar',
+					data: build(),
+					itemStyle: {
+						normal: {
+							color: 'transparent'
+						},
+					}
+				}, {
+					coordinateSystem: 'cartesian2d',
+					type: 'lines',
+					zlevel: -2,
+					effect: {
+						show: true,
+						period: 1,
+						trailLength: 0.01,
+						symbolSize: 4,
+						symbol: 'circle',
+						loop: true
+					},
+					lineStyle: {
+						normal: {
+							color: '#ccc',
+							opacity: 0,
+							curveness: 0
+						}
+					},
+					data: pole,
+				}, {
+					coordinateSystem: 'cartesian2d',
+					type: 'lines',
+					zlevel: 2,
+					symbolSize: 3,
+					effect: {
+						show: true,
+						period: 1,
+						trailLength: 0.01,
+						symbolSize: 5,
+						symbol: 'pin',
+						loop: true
+					},
+					lineStyle: {
+						normal: {
+							color: '#ccc',
+							opacity: 0.02,
+							width: 0.01,
+							curveness: 0.1
+						}
+					},
+					data: all,
+				})
+			}
+
+			// 随机位置
+			// fireWork(Math.random() * 200,  Math.random() * 160);
+			// fireWork(Math.random() * 200,  Math.random() * 160);
+			// fireWork(Math.random() * 200,  Math.random() * 160);
+			// fireWork(Math.random() * 200,  Math.random() * 160);
+			// fireWork(Math.random() * 200,  Math.random() * 160);
+			// fireWork(Math.random() * 200,  Math.random() * 160);
+			// fireWork(Math.random() * 200,  Math.random() * 160);
+			// fireWork(Math.random() * 200,  Math.random() * 160);
+			// fireWork(Math.random() * 200,  Math.random() * 160);
+			// fireWork(Math.random() * 200,  Math.random() * 160);
+			// 同一高度
+			// fireWork(Math.random() * 200, 160, aa, bb);
+			// fireWork(Math.random() * 200, 160, aa, bb);
+			// fireWork(Math.random() * 200, 160, aa, bb);
+			// fireWork(Math.random() * 200, 160, aa, bb);
+			// fireWork(Math.random() * 200, 160, aa, bb);
+			// fireWork(Math.random() * 200, 160, aa, bb);
+			// fireWork(Math.random() * 200, 160, aa, bb);
+			// fireWork(Math.random() * 200, 160, aa, bb);
+			// fireWork(Math.random() * 200, 160, aa, bb);
+			// fireWork(Math.random() * 200, 160, aa, bb);
+			// 心形
+			fireWork(100, 160, aa, bb);
+			fireWork(140, 180, aa, bb);
+			fireWork(175, 165, aa, bb);
+			fireWork(170, 130, aa, bb);
+			fireWork(160, 100, aa, bb);
+			fireWork(140, 70, aa, bb);
+			fireWork(60, 180, aa, bb);
+			fireWork(25, 165, aa, bb);
+			fireWork(30, 130, aa, bb);
+			fireWork(40, 100, aa, bb);
+			fireWork(60, 70, aa, bb);
+			fireWork(100, 30, aa, bb);
+
+
+			option = {
+				xAxis: {
+					data: [],
+					splitLine: {
+						show: false
+					},
+					axisLine: {
+						show: false
+					},
+					axisTick: {
+						show: false
+					},
+					axisLabel: {
+						show: false
+					}
+				},
+				yAxis: {
+					silent: true,
+					splitLine: {
+						show: false
+					},
+					axisLine: {
+						show: false
+					},
+					axisTick: {
+						show: false
+					},
+					axisLabel: {
+						show: false
+					}
+				},
+				series: that.series,
+			};
+
+			fireworksChart.setOption(option);
+
+			/********** 窗口大小改变时，重置报表大小 ********************/
+			window.onresize = function () {
+				fireworksChart.resize();
+			};
+		});
+	</script>
+</body>
+
 </html>
